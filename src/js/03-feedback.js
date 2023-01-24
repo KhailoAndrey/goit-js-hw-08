@@ -10,9 +10,11 @@ const inputForm = {
 };
 
 if (localStorage.getItem(LOCALSTORAGE_KEY_FORM) !== null) {
-  console.log(JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_FORM)));
+  savedUserForm();
+}
+
+function savedUserForm() {
   const savedForm = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_FORM));
-  console.log(savedForm);
   form.elements.email.value = savedForm.email;
   form.elements.message.value = savedForm.message;
 }
@@ -23,15 +25,15 @@ function saveStorageData(ev) {
   ev.preventDefault();
   const targetName = ev.target.name;
   inputForm[targetName] = ev.target.value;
-  console.log(inputForm);
+  // console.log(inputForm);
   localStorage.setItem(LOCALSTORAGE_KEY_FORM, JSON.stringify(inputForm));
 }
 
 form.addEventListener('submit', submitForm);
 
-function submitForm() {
+function submitForm(ev) {
+  ev.preventDefault();
   console.log(JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_FORM)));
-  // form.reset();
+  form.reset();
   localStorage.removeItem(LOCALSTORAGE_KEY_FORM);
 }
-// const throttled = throttle(saveStorageData, 500);
