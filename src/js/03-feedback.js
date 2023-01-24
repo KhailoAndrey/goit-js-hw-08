@@ -9,29 +9,29 @@ const inputForm = {
   message: message,
 };
 
-form.addEventListener('input', saveStorageData);
+if (localStorage.getItem(LOCALSTORAGE_KEY_FORM) !== null) {
+  console.log(JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_FORM)));
+  const savedForm = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_FORM));
+  console.log(savedForm);
+  form.elements.email.value = savedForm.email;
+  form.elements.message.value = savedForm.message;
+}
+
+form.addEventListener('input', throttle(saveStorageData, 500));
 
 function saveStorageData(ev) {
   ev.preventDefault();
   const targetName = ev.target.name;
-  // if (targetName === "email") {
-  //     inputForm.email = ev.target.value;
-  // } else if (targetName === "message") {
-  //     inputForm.message = ev.target.value;
-  // }
   inputForm[targetName] = ev.target.value;
-  // console.log(inputForm);
+  console.log(inputForm);
   localStorage.setItem(LOCALSTORAGE_KEY_FORM, JSON.stringify(inputForm));
 }
-throttle(saveStorageData, 1500);
 
-form.addEventListener('submit', () => {
-  console.log(localStorage.getItem(LOCALSTORAGE_KEY_FORM));
-  // console.log(
-  //     JSON.parse(
-  //         localStorage.getItem(LOCALSTORAGE_KEY_FORM)
-  //     )
-  // );
-  form.reset();
-});
+form.addEventListener('submit', submitForm);
+
+function submitForm() {
+  console.log(JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY_FORM)));
+  // form.reset();
+  localStorage.removeItem(LOCALSTORAGE_KEY_FORM);
+}
 // const throttled = throttle(saveStorageData, 500);
